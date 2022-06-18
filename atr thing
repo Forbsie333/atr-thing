@@ -1,0 +1,80 @@
+indicator("My script")
+
+[auclose, aulow, auhigh] = request.security("AUDUSD", "15", expression=[close, low, high])
+[euclose, eulow, euhigh] = request.security("EURUSD", "15", expression=[close, low, high])
+[gaclose, galow, gahigh] = request.security("GBPAUD", "15", expression=[close, low, high])
+[gcclose, gclow, gchigh] = request.security("GBPCHF", "15", expression=[close, low, high])
+[ucaclose, ucalow, ucahigh] = request.security("USDCAD", "15", expression=[close, low, high])
+[uchclose, uchlow, uchhigh] = request.security("USDCHF", "15", expression=[close, low, high])
+
+autr1 = math.max(auhigh - aulow, math.abs(auhigh - auclose[1]), math.abs(aulow - auclose[1]))
+eutr2 = math.max(euhigh - eulow, math.abs(euhigh - euclose[1]), math.abs(eulow - euclose[1]))
+gatr3 = math.max(gahigh - galow, math.abs(gahigh - gaclose[1]), math.abs(galow - gaclose[1]))
+gctr4 = math.max(gchigh - gclow, math.abs(gchigh - gcclose[1]), math.abs(gclow - gcclose[1]))
+ucatr5 = math.max(ucahigh - ucalow, math.abs(ucahigh - ucaclose[1]), math.abs(ucalow - ucaclose[1]))
+uchtr6 = math.max(uchhigh - uchlow, math.abs(uchhigh - uchclose[1]), math.abs(uchlow - uchclose[1]))
+
+atr1 = ta.rma(autr1, 5)
+atr2 = ta.rma(eutr2, 5)
+atr3 = ta.rma(gatr3, 5)
+atr4 = ta.rma(gctr4, 5)
+atr5 = ta.rma(ucatr5, 5)
+atr6 = ta.rma(uchtr6, 5)
+
+atr11 = ((auhigh[4] - aulow[4]) + (auhigh[3] - aulow[3]) + (auhigh[2] - aulow[2]) + (auhigh[1] - aulow[1]) + (auhigh - aulow)) / 5
+atr12 = ((euhigh[4] - eulow[4]) + (euhigh[3] - eulow[3]) + (euhigh[2] - eulow[2]) + (euhigh[1] - eulow[1]) + (euhigh - eulow)) / 5 
+atr13 = ((gahigh[4] - galow[4]) + (gahigh[3] - galow[3]) + (gahigh[2] - galow[2]) + (gahigh[1] - galow[1]) + (gahigh - galow)) / 5 
+atr14 = ((gchigh[4] - gclow[4]) + (gchigh[3] - gclow[3]) + (gchigh[2] - gclow[2]) + (gchigh[1] - gclow[1]) + (gchigh - gclow)) / 5 
+atr15 = ((ucahigh[4] - ucalow[4]) + (ucahigh[3] - ucalow[3]) + (ucahigh[2] - ucalow[2]) + (ucahigh[1] - ucalow[1]) + (ucahigh - ucalow)) / 5 
+atr16 = ((uchhigh[4] - uchlow[4]) + (uchhigh[3] - uchlow[3]) + (uchhigh[2] - uchlow[2]) + (uchhigh[1] - uchlow[1]) + (uchhigh - uchlow)) / 5 
+
+smaa1 = ta.sma(auhigh, 5)
+smaa2 = ta.sma(aulow, 5)
+smab1 = ta.sma(euhigh, 5)
+smab2 = ta.sma(eulow, 5)
+smac1 = ta.sma(gahigh, 5)
+smac2 = ta.sma(galow, 5)
+smad1 = ta.sma(gchigh, 5)
+smad2 = ta.sma(gclow, 5)
+smae1 = ta.sma(ucahigh, 5)
+smae2 = ta.sma(ucalow, 5)
+smaf1 = ta.sma(uchhigh, 5)
+smaf2 = ta.sma(uchlow, 5)
+
+atr21 = smaa1 - smaa2
+atr22 = smab1 - smab2
+atr23 = smac1 - smac2
+atr24 = smad1 - smad2
+atr25 = smae1 - smae2
+atr26 = smaf1 - smaf2
+
+var T = table.new(position=position.middle_center, columns=4, rows=7, bgcolor=#3bc92c, frame_color=color.gray, frame_width=2, border_color=color.black, border_width=1)
+f_table_set_titles() =>
+    // X
+    table.cell(table_id=T, column=0, row=0, text='', width=0, height=0, text_color=color.black, text_size=size.auto, bgcolor=#46917a)
+    // vertical
+    table.cell(table_id=T, column=0, row=0, text='   ', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=1, text='c1', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=2, text='c2', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=3, text='c3', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=4, text='c4', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=5, text='c5', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=0, row=6, text='c6', width=0, height=3, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    // horizontal
+    table.cell(table_id=T, column=0, row=0, text='ID', width=5, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=1, row=0, text='atr1', width=6, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=2, row=0, text='atr2', width=6, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=3, row=0, text='atr3', width=6, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+f_table_set_titles()
+
+f_table_set_row_values(_r, _1, _2, _3) =>
+    table.cell(table_id=T, column=1, row=_r, text=str.tostring(_1, '#.#####'), width=0, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=2, row=_r, text=str.tostring(_2, '#.#####'), width=0, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    table.cell(table_id=T, column=3, row=_r, text=str.tostring(_2, '#.#####'), width=0, height=0, text_color=color.black, text_size=size.auto, bgcolor=#b6aaa5)
+    
+f_table_set_row_values(1, atr1, atr11, atr21)
+f_table_set_row_values(2, atr2, atr12, atr22)
+f_table_set_row_values(3, atr3, atr13, atr23)
+f_table_set_row_values(4, atr4, atr14, atr24)
+f_table_set_row_values(5, atr5, atr15, atr25)
+f_table_set_row_values(6, atr6, atr16, atr26)
